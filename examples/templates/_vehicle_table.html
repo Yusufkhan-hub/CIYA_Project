@@ -1,0 +1,49 @@
+<table id="vehicle-table" class="table">
+  <thead>
+  <tr>
+    <th class="text-center" scope="col">SNo</th>
+    <th class="text-center" scope="col">Title</th>
+    <th class="text-center" scope="col">Title2</th>
+    <th class="text-center" scope="col">Title3</th>
+    <th class="text-center" scope="col">Title4</th>
+    <th class="text-center" scope="col">Title5</th>
+    <th class="text-center" scope="col">Title6</th>
+    <th class="text-center" scope="col">Update / Delete</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for item in vehicle %}
+    <tr>
+      <th class="text-center" scope="row">{{ forloop.counter }}</th>
+      <td class="text-center">{{ item.wheeler }}</td>
+      <td class="text-center">{{ item.transporter }}</td>
+      <td class="text-center">{{ item.vehicle_no }}</td>
+      <td class="text-center">{{ item.vehicle_owner }}</td>
+      <td class="text-center">{{ item.owner_contact }}</td>
+      <td class="text-center">{{ item.own_vehivle }}</td>
+      <td class="text-center">
+        <!-- Update book buttons -->
+        <button type="button" class="update-vehicle btn btn-sm btn-primary" data-form-url="{% url 'update_details' item.pk %}">
+          <span class="fa fa-pencil"></span>
+        </button>
+        <!-- Delete book buttons -->
+        <button type="button" class="delete-vehicle btn btn-sm btn-danger" data-form-url="{% url 'delete_details' item.pk %}">
+          <span class="fa fa-trash"></span>
+        </button>
+      </td>
+    </tr>
+  {% endfor %}
+
+  </tbody>
+
+</table>
+  <div>
+                <center>
+                {% if vehicle.has_previous %}
+                <a href="{% url 'index' %}?page={{vehicle.previous_page_number}}" class="btn btn-info">Previous Page</a>
+                {% endif %}
+                {% if vehicle.has_next %}
+                <a href="{% url 'index' %}?page={{vehicle.next_page_number}}" class="btn btn-info">Next Page</a>
+                {% endif %}
+                </center>
+  </div>

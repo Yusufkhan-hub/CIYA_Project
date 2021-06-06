@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+  {% include "_modal.html" %}
+
+  <div class="container mt-3">
+    
+  
+    <div class="row">
+      <aside class="sidebar-light-primary elevation-2">
+       
+    
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- SidebarSearch Form -->
+          <div class="form-inline my-1">
+            <div class="input-group" data-widget="sidebar-search" >
+              <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                  <i class="fas fa-search fa-fw"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+            <!-- Brand Logo -->
+          <a href="#" class="brand-link">
+            <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">CIYA</span>
+          </a>
+          
+    
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column">
+              <!-- Add icons to the links using the .nav-icon class
+                   with font-awesome or any other icon font library -->
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Details 
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    I Love Ferrari..!!
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>
+      <div class="card card-primary card-outline mx-3">
+        <div class="card-body">
+          <div class="col">
+            <h3 class="text-primary">Manage Vehicles</h3>
+            <div class="input-group">
+              <div class="input-group-text"><i class="fas fa-search fa-fw"></i>
+              </div>
+                <input type="text" class="form-control" placeholder="Search Vehicle">
+            </div>   
+            <div class="card bg-light disabled mt-2">
+              <div class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">                  
+                  <div class="col">
+                    <div class="card-body">
+                      <h5>Transport</h5>
+                      <input type="search" class="form-control input-sm" placeholder="Search Task">                  
+                      <button id="add-details" class="btn btn-primary" type="button" name="button">
+                        <span class="fa fa-plus mr-2"></span>Add details
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 mb-3">
+              {% include "_vehicle_table.html" %}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block extrascripts %}
+  <script type="text/javascript">
+      $(function () {
+          
+          // Add Details
+          function addDetailsModalForm() {
+            $("#add-details").modalForm({
+                formURL: "{% url 'add_details' %}",
+                modalID: "#create-modal"
+            });
+          }
+          addDetailsModalForm();
+          var asyncSuccessMessageUpdate = [
+            "<div ",
+            "style='position:fixed;top:0;z-index:10000;width:100%;border-radius:0;' ",
+            "class='alert alert-icon alert-success alert-dismissible fade show mb-0' role='alert'>",
+            "Success: Book was updated.",
+            "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>",
+            "<span aria-hidden='true'>&times;</span>",
+            "</button>",
+            "</div>",
+            "<script>",
+            "$('.alert').fadeTo(2000, 500).slideUp(500, function () {$('.alert').slideUp(500).remove();});",
+            "<\/script>"
+          ].join("");
+
+          // modal form
+          function updateDetailsModalForm() {
+            $(".update-vehicle").each(function () {
+              $(this).modalForm({
+                formURL: $(this).data("form-url"),
+                asyncUpdate: true,
+                asyncSettings: {
+                  closeOnSubmit: false,
+                  successMessage: asyncSuccessMessageUpdate,
+                  dataUrl: "vehicle/",
+                  dataElementId: "#vehicle-table",
+                  dataKey: "table",
+                  addModalFormFunction: reinstantiateModalForms
+                }
+              });
+            });
+          }
+          updateDetailsModalForm();
+
+          // Delete Record - formURL is retrieved from the data of the element
+          function deleteDetailsModalForm() {
+            $(".delete-vehicle").each(function () {
+                $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+            });
+          }
+          deleteDetailsModalForm();
+
+
+          function reinstantiateModalForms() {
+            addDetailsModalForm();
+            
+            updateDetailsModalForm();
+            deleteDetailsModalForm();
+          }
+
+          // Hide message
+          $(".alert").fadeTo(2000, 500).slideUp(500, function () {
+              $(".alert").slideUp(500);
+          });
+      });
+  </script>
+{% endblock extrascripts %}
